@@ -585,8 +585,8 @@ public class FlutterLocalNotificationsPlugin
   }
 
   private static void scheduleNextRepeatingNotification(
-      Context context, NotificationDetails notificationDetails) {
-    long repeatInterval = calculateRepeatIntervalMilliseconds(notificationDetails);
+      Context context, NotificationDetails notificationDetails,int numberDayRepeat) {
+    long repeatInterval = calculateRepeatIntervalMilliseconds(notificationDetails,numberDayRepeat);
     long notificationTriggerTime =
         calculateNextNotificationTrigger(notificationDetails.calledAt, repeatInterval);
     Gson gson = buildGson();
@@ -646,8 +646,8 @@ public class FlutterLocalNotificationsPlugin
   private static void repeatNotification(
       Context context,
       NotificationDetails notificationDetails,
-      Boolean updateScheduledNotificationsCache) {
-    long repeatInterval = calculateRepeatIntervalMilliseconds(notificationDetails);
+      Boolean updateScheduledNotificationsCache,int numberDayRepeat) {
+    long repeatInterval = calculateRepeatIntervalMilliseconds(notificationDetails,numberDayRepeat);
 
     long notificationTriggerTime = notificationDetails.calledAt;
     if (notificationDetails.repeatTime != null) {
@@ -757,7 +757,7 @@ public class FlutterLocalNotificationsPlugin
     return notificationTriggerTime;
   }
 
-  private static long calculateRepeatIntervalMilliseconds(NotificationDetails notificationDetails) {
+  private static long calculateRepeatIntervalMilliseconds(NotificationDetails notificationDetails,int numberDayRepeat) {
     long repeatInterval = 0;
     switch (notificationDetails.repeatInterval) {
       case EveryMinute:
@@ -767,7 +767,7 @@ public class FlutterLocalNotificationsPlugin
         repeatInterval = 60000 * 60;
         break;
       case Daily:
-        repeatInterval = 60000 * 60 * 24;
+        repeatInterval = 60000 * 60 * 24*numberDayRepeat;
         break;
       case Weekly:
         repeatInterval = 60000 * 60 * 24 * 7;
